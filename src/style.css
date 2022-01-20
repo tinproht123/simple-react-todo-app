@@ -1,0 +1,17 @@
+h1,
+p {
+  font-family: Lato;
+}
+li {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.clear-btn {
+  letter-spacing: 3px;
+}
+h1 {
+  letter-spacing: 3px;
+}
+#title {
+  letter-spacing: 3px;
+}
