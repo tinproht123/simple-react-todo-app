@@ -3,32 +3,17 @@ import React, { useContext, useState, useEffect } from 'react';
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [list, setList] = useState([]);
+  const data = [
+    { id: 1, title: 'add item to list', check: false },
+    { id: 2, title: 'You can delete item from list', check: false },
+    { id: 3, title: 'double click on item to check', check: false },
+    { id: 4, title: 'double click on item again to uncheck', check: true },
+  ];
+  const [list, setList] = useState(data);
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [check, setCheck] = useState(false);
   const [editID, setEditID] = useState(null);
-  const [finishedList, setFinishedList] = useState([]);
-
-  useEffect(() => {
-    list.map((item) => {
-      if (item.check === true) {
-        let index = list.indexOf(item);
-        list.splice(index, 1);
-        setFinishedList([...finishedList, item]);
-      }
-    });
-  }, [list]);
-
-  useEffect(() => {
-    finishedList.map((item) => {
-      if (item.check === false) {
-        let index = finishedList.indexOf(item);
-        finishedList.splice(index, 1);
-        setList([...list, item]);
-      }
-    });
-  }, [finishedList]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,14 +33,6 @@ const AppProvider = ({ children }) => {
       setText('');
       setIsEditing(false);
       setEditID(null);
-    } else if (check) {
-      const newItem = {
-        id: new Date().getTime().toString(),
-        title: text,
-        check: check,
-      };
-      setFinishedList([...finishedList, newItem]);
-      setText('');
     } else {
       const newItem = {
         id: new Date().getTime().toString(),
@@ -84,11 +61,14 @@ const AppProvider = ({ children }) => {
   };
 
   const toggleCheck = (id) => {
-    setList(
-      list.map((item) =>
-        item.id === id ? { ...item, check: !item.check } : item
-      )
-    );
+    const checkItem = list.find((item) => item.id === id);
+    setList(list.splice(list.indexOf(checkItem), 1));
+    checkItem.check = !checkItem.check;
+    if (checkItem) {
+      setList([...list, checkItem]);
+    } else {
+      setList([checkItem, ...list]);
+    }
   };
 
   return (
@@ -96,7 +76,6 @@ const AppProvider = ({ children }) => {
       value={{
         list,
         setList,
-        finishedList,
         text,
         setText,
         check,
