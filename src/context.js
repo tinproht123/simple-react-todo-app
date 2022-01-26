@@ -77,11 +77,9 @@ const AppProvider = ({ children }) => {
     const checkItem = list.find((item) => item.id === id);
     setList(list.splice(list.indexOf(checkItem), 1));
     checkItem.check = !checkItem.check;
-    if (checkItem.check) {
-      setList([...list, checkItem]);
-    } else {
-      setList([checkItem, ...list]);
-    }
+    return checkItem.check
+      ? setList([...list, checkItem])
+      : setList([checkItem, ...list]);
   };
 
   return (
